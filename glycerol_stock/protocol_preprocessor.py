@@ -43,7 +43,7 @@ def read_args(explicit_args):
                         )
 
     args = vars(parser.parse_args())
-    args |= explicit_args
+    if explicit_args: args |= explicit_args
 
     if not args['%%TIPRACK%%']:
         args['%%TIPRACK%%'] = {
