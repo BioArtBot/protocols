@@ -1,32 +1,46 @@
+from ctypes import c_buffer
+import json
+import logging
 import os
-import tempfile
-import unittest
-import filecmp
-import sbol3 
-import paml
+from typing import Tuple
+
+import rdflib as rdfl
+import sbol3
 import tyto
+from sbol3 import Document
 
+import paml
 
-# import paml_md
-import uml
+logger: logging.Logger = logging.Logger("golden_gate_protocol")
+
+CONT_NS = rdfl.Namespace('https://sift.net/container-ontology/container-ontology#')
+OM_NS = rdfl.Namespace('http://www.ontology-of-units-of-measure.org/resource/om-2/')
 
 #############################################
 # set up the document
 print('Setting up document')
-doc = sbol3.Document()
-sbol3.set_namespace('https://bbn.com/scratch/')
+
+def prepare_document() -> Document:
+    logger.info('Setting up document')
+    doc = sbol3.Document()
+    sbol3.set_namespace('https://bbn.com/scratch/')
+    return doc
+
 
 #############################################
 # Import the primitive libraries
-print('Importing libraries')
-paml.import_library('liquid_handling')
-print('... Imported liquid handling')
-paml.import_library('plate_handling')
-print('... Imported plate handling')
-paml.import_library('spectrophotometry')
-print('... Imported spectrophotometry')
-paml.import_library('sample_arrays')
-print('... Imported sample arrays')
+
+def import_paml_libraries() -> None:
+    logger.info('Importing libraries')
+    paml.import_library('liquid_handling')
+    logger.info('... Imported liquid handling')
+    paml.import_library('plate_handling')
+    logger.info('... Imported plate handling')
+    paml.import_library('spectrophotometry')
+    logger.info('... Imported spectrophotometry')
+    paml.import_library('sample_arrays')
+    logger.info('... Imported sample arrays')
+
 
 #############################################
 # Create the protocol
@@ -111,7 +125,8 @@ PREFIX_MAP = json.dumps({"cont": CONT_NS, "om": OM_NS})
 
 
 # define the wells where you will be doing the GG assembly
-goldengate_build_wells = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='G1:G2')
+def create_buildwells(protocol: paml.protocol):
+    goldengate_build_wells = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='G1:G2')
 
 
 # add coordinates of each component in the plate using the provision and platecoordinates primitives
@@ -151,48 +166,43 @@ def provision_ligase(protocol: paml.Protocol, plate, ligase) -> None:
     protocol.primitive_step('Provision', resource=ligase, destination=c_ligase.output_pin('samples'),
                             amount=sbol3.Measure(15, tyto.OM.microliter))
 
-source_wells = [MC016, MC043, MC066, MC024, bsaI, buffer_T4, ligase ]
+
+
+    source_wells = [c_ligase, c_buffer, c_]
 
 #############################################
  # set up the document
 def golden_gate_protocol() -> Tuple[paml.Protocol, Document]:
-    
     doc: Document = prepare_document()
-
-
-#############################################
-    # Import the primitive libraries
-    import_paml_libraries()
 
 #############################################
 # Create the protocol
-     protocol: paml.Protocol = create_protocol()
-      doc.add(protocol)
+protocol: paml.Protocol = create_protocol()
+doc.add(protocol)
 
 
 
 # create the materials to be provisione
-
 plasmid_backbone = create_MC016()
-      doc.add(plasmid_backbone)
+doc.add(plasmid_backbone)
 
 promorbs = create_MC043()
-      doc.add(promorbs)
+doc.add(promorbs)
 
 GFP = create_MC066()
-      doc.add(GFP)
+doc.add(GFP)
 
 terminator = create_MC024()
-      doc.add(ligase)
+doc.add(terminator)
 
 bsaI = create_bsaI()
-      doc.add(bsaI)
+doc.add(bsaI)
 
 buffer = create_bufferT4()
-      doc.add(buffer)
+doc.add(buffer)
 
 ligase = create_ligase()
-      doc.add(ligase)
+doc.add(ligase)
 
 
 # actual steps of the protocol (liquid handling part)
@@ -202,22 +212,23 @@ plate = create_plate(protocol)
 
 # put DNA into the selected wells following the build plan
 
-provision_MC016(protocol: paml.Protocol, plate, plasmid_backbone)
+provision_MC016(protocol, plate, plasmid_backbone)
 
-provision_MC043(protocol: paml.Protocol, plate, promorbs)
+provision_MC043(protocol, plate, promorbs)
 
-provision_MC066(protocol: paml.Protocol, plate, GFP)
+provision_MC066(protocol, plate, GFP)
 
-provision_MC024(protocol: paml.Protocol, plate, terminator)
+provision_MC024(protocol, plate, terminator)
 
-provision_bsaI(protocol: paml.Protocol, plate, bsaI)
+provision_bsaI(protocol, plate, bsaI)
 
-provision_bufferT4(protocol: paml.Protocol, plate, buffer)
+provision_bufferT4(protocol, plate, buffer)
 
-provision_ligase(protocol: paml.Protocol, plate, ligase)
+provision_ligase(protocol, plate, ligase)
+
 
 # Transfer the dna to assembly wells following the build plan
-protocol.primitive_step('TransferByMap', source=source_wells, destination=goldengate_build_wells.output_pin('samples'), plan=sbol3.Measure(2, tyto.OM.microliter))
+protocol.primitive_step('TransferByMap', source=source_wells, destination= goldengate_build_wells.output_pin('samples'), plan=sbol3.Measure(2, tyto.OM.microliter))
 
 
 output = protocol.designate_output('constructs', 'http://bioprotocols.org/paml#SampleCollection', build_wells.output_pin('samples'))
@@ -239,12 +250,13 @@ print('Validating and writing protocol')
 v = doc.validate()
 assert len(v) == 0, "".join(f'\n {e}' for e in v)
 
- rdf_filename = os.path.join(os.path.dirname(__file__), 'golden_gate_assembly.nt')
-    doc.write(rdf_filename, sbol3.SORTED_NTRIPLES)
-    print(f'Wrote file as {rdf_filename}')
+rdf_filename = os.path.join(os.path.dirname(__file__), 'golden_gate_assembly.nt')
+doc.write(rdf_filename, sbol3.SORTED_NTRIPLES)
+print(f'Wrote file as {rdf_filename}')
 
 
 # render and view the dot
 dot = protocol.to_dot()
 dot.render(f'{protocol.name}.gv')
 dot.view()
+
