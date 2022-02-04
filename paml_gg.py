@@ -2,7 +2,7 @@ import os
 import tempfile
 import unittest
 import filecmp
-import sbol3
+import sbol3 
 import paml
 import tyto
 
@@ -55,7 +55,7 @@ T4_buffer_NEb
 
 #create the selected materias in PAML form
 
-def create_MC016() -> sbol3.Component:
+def create_MC016() -> protocol.Component:
     plasmid_backbone = protocol.Component('plasmid_backbone',)
     plasmid_backbone.name = 'BIOBRICK, plasmid backbone, kanamicyn resistent'   
     return plasmid_backbone
@@ -63,32 +63,32 @@ def create_MC016() -> sbol3.Component:
 def create_MC043() -> protocol.Component:
   promorbs = protocol.Component('promorbs',)
   promorbs.name = 'BIOBRICK, promoter+rbs, chloro resistent'   
-    return promorbs
+  return promorbs
 
 def create_MC066() -> protocol.Component:
   GFP = protocol.Component('GFP',)
   GFP.name = 'BIOBRICK, GFP coding sequence'   
-    return GFP
+  return GFP
 
 def create_MC024() -> protocol.Component:
   terminator = protocol.Component('terminator',)
   terminator.name = 'BIOBRICK, sequence terminator, chloro resistent'   
   return terminator
 
-def create_bsaI() -> protocol.Component:
+def create_bsaI() -> sbol3.Component:
   BsaI = protocol.Component('enzyme_bsaI',)
-   BsaI.name = 'enzyme, cut in selected parts, bsaI'   
-    return bsaI
+  BsaI.name = 'enzyme, cut in selected parts, bsaI'   
+  return bsaI
 
-def create_bufferT4() -> protocol.Component:
-  buffer = protocol.Component('enzyme_buffer_T4',)
-   buffer.name = 'buffer_T4, enzyme ligase, NEB'   
+def create_bufferT4() -> sbol3.Component:
+    buffer = protocol.Component('enzyme_buffer_T4',)
+    buffer.name = 'buffer_T4, enzyme ligase, NEB'   
     return buffer
 
-def create_ligase() -> protocol.Component:
+def create_ligase() -> sbol3.Component:
   ligase = protocol.Component('enzyme_ligase',)
-   ligase.name = 'enzyme, bind sequences, needs buffer T4'   
-    return ligase
+  ligase.name = 'enzyme, bind sequences, needs buffer T4'   
+  return ligase
 
 # add an parameters for specifying the layout of the DNA source plate and build plate
 PLATE_SPECIFICATION = \
@@ -101,10 +101,10 @@ PLATE_SPECIFICATION = \
 
 def create_plate(protocol: paml.Protocol):
    spec = paml.ContainerSpec(queryString=PLATE_SPECIFICATION, prefixMap=PREFIX_MAP, name='plateRequirement')
-    plate = protocol.primitive_step('EmptyContainer',
+   plate = protocol.primitive_step('EmptyContainer',
                                     specification=spec)
-    plate.name = 'Golden_Gate_plate'
-    return plate
+   plate.name = 'Golden_Gate_plate'
+   return plate
 
 PREFIX_MAP = json.dumps({"cont": CONT_NS, "om": OM_NS})
 
