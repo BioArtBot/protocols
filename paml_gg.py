@@ -2,6 +2,7 @@ from ctypes import c_buffer
 import json
 import logging
 import os
+from socket import CAN_BCM_STARTTIMER
 from typing import Tuple
 
 import rdflib as rdfl
@@ -10,6 +11,10 @@ import tyto
 from sbol3 import Document
 
 import paml
+
+
+#struggle with sourcewell & ggbuildwells definitions // verify issue with importing sbol3 & others // add new file for PAML gg protocol
+
 
 logger: logging.Logger = logging.Logger("golden_gate_protocol")
 
@@ -50,7 +55,7 @@ protocol.name = "golden_gate_protocol"
 protocol.description = '''
 This protocol is for Golden Gate modular cloning Assembly of pairs of DNA fragments into plasmids. 
 '''
-doc.add(protocol)
+doc.add(protocol) 
 
 
 #  materials to be provisioned 
@@ -125,8 +130,8 @@ PREFIX_MAP = json.dumps({"cont": CONT_NS, "om": OM_NS})
 
 
 # define the wells where you will be doing the GG assembly
-def create_buildwells(protocol: paml.protocol):
-    goldengate_build_wells = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='G1:G2')
+
+goldengate_build_wells = protocol.input_value ('PlateCoordinates', source=plate.output_pin('samples'), coordinates='G1:G2')
 
 
 # add coordinates of each component in the plate using the provision and platecoordinates primitives
@@ -168,7 +173,7 @@ def provision_ligase(protocol: paml.Protocol, plate, ligase) -> None:
 
 
 
-    source_wells = [c_ligase, c_buffer, c_]
+source_wells = [c_buffer, c_ligase]
 
 #############################################
  # set up the document
