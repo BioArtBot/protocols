@@ -3,7 +3,8 @@ import json
 import logging
 import os
 from socket import CAN_BCM_STARTTIMER
-from typing import Tuple
+from subprocess import list2cmdline
+from typing import Protocol, Tuple
 
 import rdflib as rdfl
 import sbol3
@@ -21,6 +22,7 @@ logger: logging.Logger = logging.Logger("golden_gate_protocol")
 CONT_NS = rdfl.Namespace('https://sift.net/container-ontology/container-ontology#')
 OM_NS = rdfl.Namespace('http://www.ontology-of-units-of-measure.org/resource/om-2/')
 
+
 #############################################
 # set up the document
 print('Setting up document')
@@ -29,6 +31,7 @@ def prepare_document() -> Document:
     logger.info('Setting up document')
     doc = sbol3.Document()
     sbol3.set_namespace('https://bbn.com/scratch/')
+
     return doc
 
 
@@ -47,15 +50,21 @@ def import_paml_libraries() -> None:
     logger.info('... Imported sample arrays')
 
 
+DOCSTRING = \
+    '''
+This is the pilot study of the golden gate MOCLO protocol used in the CRI laboratories to test the assembly both manually and 
+mechanically using an opentrons machine. 
+'''
 #############################################
 # Create the protocol
 print('Creating protocol')
-protocol = paml.Protocol('golden_gate_protocol')
-protocol.name = "golden_gate_protocol"
-protocol.description = '''
-This protocol is for Golden Gate modular cloning Assembly of pairs of DNA fragments into plasmids. 
-'''
-doc.add(protocol) 
+def create_protocol() -> paml.Protocol:
+    logger.info('Creating protocol')
+    protocol: paml.Protocol = paml.Protocol('golden_gate_protocol')
+    protocol.name = "golden_gate_protocol"
+    protocol.description = DOCSTRING
+    return protocol
+
 
 
 #  materials to be provisioned 
@@ -71,43 +80,49 @@ enzyme ligase
 T4_buffer_NEb
 """
 
+protocol = create_protocol()
 
 #create the selected materias in PAML form
 
-def create_MC016() -> protocol.Component:
-    plasmid_backbone = protocol.Component('plasmid_backbone',)
+def create_MC016() -> sbol3.Component:
+    plasmid_backbone = sbol3.Component('plasmid_backbone','https://github.com/BioArtBot/protocols/plasmid')
     plasmid_backbone.name = 'BIOBRICK, plasmid backbone, kanamicyn resistent'   
     return plasmid_backbone
 
-def create_MC043() -> protocol.Component:
-  promorbs = protocol.Component('promorbs',)
-  promorbs.name = 'BIOBRICK, promoter+rbs, chloro resistent'   
-  return promorbs
+def create_MC043() -> sbol3.Component:
+    promorbs = sbol3.Component('promorbs','https://github.com/BioArtBot/protocols/promorbs')
+    promorbs.name = 'BIOBRICK, promoter+rbs, chloro resistent'   
+    return promorbs
 
-def create_MC066() -> protocol.Component:
-  GFP = protocol.Component('GFP',)
+def create_MC066() -> sbol3.Component:
+  GFP = sbol3.Component('GFP','https://github.com/BioArtBot/protocols/GFP')
   GFP.name = 'BIOBRICK, GFP coding sequence'   
   return GFP
 
-def create_MC024() -> protocol.Component:
-  terminator = protocol.Component('terminator',)
-  terminator.name = 'BIOBRICK, sequence terminator, chloro resistent'   
-  return terminator
+def create_MC024() -> sbol3.Component:
+    terminator = sbol3.Component('terminator','https://github.com/BioArtBot/protocols/terminator')
+    terminator.name = 'BIOBRICK, sequence terminator, chloro resistent'   
+    return terminator
 
 def create_bsaI() -> sbol3.Component:
-  BsaI = protocol.Component('enzyme_bsaI',)
-  BsaI.name = 'enzyme, cut in selected parts, bsaI'   
-  return bsaI
+    bsaI = sbol3.Component('enzyme_bsaI','https://github.com/BioArtBot/protocols/bsaI')
+    bsaI.name = 'enzyme, cut in selected parts, bsaI'   
+    return bsaI
 
 def create_bufferT4() -> sbol3.Component:
-    buffer = protocol.Component('enzyme_buffer_T4',)
+    buffer = sbol3.Component('enzyme_buffer_T4','https://github.com/BioArtBot/protocols/buffer')
     buffer.name = 'buffer_T4, enzyme ligase, NEB'   
     return buffer
 
 def create_ligase() -> sbol3.Component:
-  ligase = protocol.Component('enzyme_ligase',)
-  ligase.name = 'enzyme, bind sequences, needs buffer T4'   
-  return ligase
+    ligase = sbol3.Component('enzyme_ligase','https://github.com/BioArtBot/protocols/ligase')
+    ligase.name = 'enzyme, bind sequences, needs buffer T4'   
+    return ligase
+
+
+# settle parameters for fuction definitions
+doc = prepare_document()
+
 
 # add an parameters for specifying the layout of the DNA source plate and build plate
 PLATE_SPECIFICATION = \
@@ -128,116 +143,153 @@ def create_plate(protocol: paml.Protocol):
 PREFIX_MAP = json.dumps({"cont": CONT_NS, "om": OM_NS})
 
 
-
-# define the wells where you will be doing the GG assembly
-
-goldengate_build_wells = protocol.input_value ('PlateCoordinates', source=plate.output_pin('samples'), coordinates='G1:G2')
-
-
 # add coordinates of each component in the plate using the provision and platecoordinates primitives
 
-def provision_MC016(protocol: paml.Protocol, plate, plasmid_backbone) -> None:
+def provision_MC016(protocol: paml.Protocol, plate, plasmid_backbone):
     c_plasmid_backbone = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='A1:B1')
     protocol.primitive_step('Provision', resource=plasmid_backbone, destination=c_plasmid_backbone.output_pin('samples'),
                             amount=sbol3.Measure(15, tyto.OM.microliter))
+    return c_plasmid_backbone
 
-def provision_MC043(protocol: paml.Protocol, plate, promorbs) -> None:
+def provision_MC043(protocol: paml.Protocol, plate, promorbs):
     c_promorbs = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='C1:D1')
     protocol.primitive_step('Provision', resource=promorbs, destination=c_promorbs.output_pin('samples'),
                             amount=sbol3.Measure(15, tyto.OM.microliter))
+    return c_promorbs 
 
-def provision_MC066(protocol: paml.Protocol, plate, GFP) -> None:
+def provision_MC066(protocol: paml.Protocol, plate, GFP):
     c_GFP = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='E1:F1')
     protocol.primitive_step('Provision', resource=GFP, destination=c_GFP.output_pin('samples'),
                             amount=sbol3.Measure(15, tyto.OM.microliter))
+    return c_GFP
 
-def provision_MC024(protocol: paml.Protocol, plate, terminator) -> None:
+def provision_MC024(protocol: paml.Protocol, plate, terminator):
     c_terminator = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='G1:H1')
     protocol.primitive_step('Provision', resource=terminator, destination=c_terminator.output_pin('samples'),
                             amount=sbol3.Measure(15, tyto.OM.microliter))
+    return c_terminator
 
-def provision_bsaI(protocol: paml.Protocol, plate, bsaI) -> None:
+def provision_bsaI(protocol: paml.Protocol, plate, bsaI):
     c_bsaI = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='A2:B2')
     protocol.primitive_step('Provision', resource=bsaI, destination=c_bsaI.output_pin('samples'),
                             amount=sbol3.Measure(15, tyto.OM.microliter))
+    return c_bsaI
 
-def provision_bufferT4(protocol: paml.Protocol, plate, buffer) -> None:
+def provision_bufferT4(protocol: paml.Protocol, plate, buffer):
     c_buffer = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='C2:D2')
     protocol.primitive_step('Provision', resource=buffer, destination=c_buffer.output_pin('samples'),
                             amount=sbol3.Measure(15, tyto.OM.microliter))
+    return c_buffer
 
-def provision_ligase(protocol: paml.Protocol, plate, ligase) -> None:
+def provision_ligase(protocol: paml.Protocol, plate, ligase):
     c_ligase = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='E2:F2')
     protocol.primitive_step('Provision', resource=ligase, destination=c_ligase.output_pin('samples'),
                             amount=sbol3.Measure(15, tyto.OM.microliter))
+    return c_ligase
 
 
+# define the function for assembly
 
-source_wells = [c_buffer, c_ligase]
+def assemble_components(protocol:paml.Protocol,source_wells,build_wells) -> None:
+    protocol.primitive_step('TransferByMap', source=source_wells, destination=build_wells.output_pin('samples'), 
+    plan=sbol3.Measure(2, tyto.OM.microliter))
 
 #############################################
  # set up the document
 def golden_gate_protocol() -> Tuple[paml.Protocol, Document]:
+    
     doc: Document = prepare_document()
 
 #############################################
+# Import the primitive libraries
+    import_paml_libraries()
+
+    
+#############################################
 # Create the protocol
-protocol: paml.Protocol = create_protocol()
-doc.add(protocol)
-
-
+    protocol: paml.Protocol = create_protocol()
+    doc.add(protocol)
 
 # create the materials to be provisione
-plasmid_backbone = create_MC016()
-doc.add(plasmid_backbone)
+    plasmid_backbone = create_MC016()
+    doc.add(plasmid_backbone)
 
-promorbs = create_MC043()
-doc.add(promorbs)
+    promorbs = create_MC043()
+    doc.add(promorbs)
 
-GFP = create_MC066()
-doc.add(GFP)
+    GFP = create_MC066()
+    doc.add(GFP)
 
-terminator = create_MC024()
-doc.add(terminator)
+    terminator = create_MC024()
+    doc.add(terminator)
 
-bsaI = create_bsaI()
-doc.add(bsaI)
+    bsaI = create_bsaI()
+    doc.add(bsaI)
 
-buffer = create_bufferT4()
-doc.add(buffer)
+    buffer = create_bufferT4()
+    doc.add(buffer)
 
-ligase = create_ligase()
-doc.add(ligase)
-
+    ligase = create_ligase()
+    doc.add(ligase)
 
 # actual steps of the protocol (liquid handling part)
 #get a plate
 
-plate = create_plate(protocol)
+    plate = create_plate(protocol)
 
 # put DNA into the selected wells following the build plan
 
-provision_MC016(protocol, plate, plasmid_backbone)
+    provision_MC016(protocol, plate, plasmid_backbone)
 
-provision_MC043(protocol, plate, promorbs)
+    provision_MC043(protocol, plate, promorbs)
 
-provision_MC066(protocol, plate, GFP)
+    provision_MC066(protocol, plate, GFP)
 
-provision_MC024(protocol, plate, terminator)
+    provision_MC024(protocol, plate, terminator)
 
-provision_bsaI(protocol, plate, bsaI)
+    provision_bsaI(protocol, plate, bsaI)
 
-provision_bufferT4(protocol, plate, buffer)
+    provision_bufferT4(protocol, plate, buffer)
 
-provision_ligase(protocol, plate, ligase)
-
-
-# Transfer the dna to assembly wells following the build plan
-protocol.primitive_step('TransferByMap', source=source_wells, destination= goldengate_build_wells.output_pin('samples'), plan=sbol3.Measure(2, tyto.OM.microliter))
+    provision_ligase(protocol, plate, ligase)
 
 
-output = protocol.designate_output('constructs', 'http://bioprotocols.org/paml#SampleCollection', build_wells.output_pin('samples'))
-protocol.order(protocol.get_last_step(), output)  # don't return until all else is complete
+     # list the materials for transfer function]
+
+    c_plasmid_backbone = provision_MC016(protocol, plate, plasmid_backbone) 
+    c_promorbs = provision_MC043(protocol, plate, promorbs)
+    c_GFP = provision_MC066(protocol, plate, GFP)
+    c_terminator = provision_MC024(protocol, plate, terminator)
+    c_bsaI = provision_bsaI(protocol, plate, bsaI)
+    c_buffer = provision_bufferT4(protocol, plate, buffer)
+    c_ligase = provision_ligase(protocol, plate, ligase)
+
+    source_wells: list=[c_plasmid_backbone,c_promorbs,c_GFP,c_terminator,c_bsaI,c_buffer,c_ligase]
+
+
+# define the wells where you will be doing the GG assembly  
+    goldengate_build_wells = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='G1:G2')
+
+    dna_source_wells = protocol.input_value('source_wells','http://bioprotocols.org/paml#SampleCollection')
+
+    dna_build_layout = protocol.input_value('goldengate_build_wells','http://bioprotocols.org/paml#SampleData') 
+
+    build_wells = protocol.primitive_step('DuplicateCollection', source=dna_build_layout) 
+
+
+# assemble DNA in build wells
+
+    assemble_components(protocol,dna_source_wells,build_wells)  
+
+
+# Finish liquid handling protocol
+
+
+    output = protocol.designate_output('constructs', 'http://bioprotocols.org/paml#SampleCollection',
+    goldengate_build_wells.output_pin('samples'))
+    protocol.order(protocol.get_last_step(), output)
+    
+    return protocol, doc  # don't return until all else is complete
 
 
 ########################################
