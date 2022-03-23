@@ -118,14 +118,18 @@ def run(protocol: protocol_api.ProtocolContext):
                              mix_after=(2,3)
                              )
 
-    protocol.comment(f'Loading complete at {datetime.datetime.now().strftime("%H:%M on %d/%m")}')
+    protocol.comment('Loading complete')
     protocol.comment('Hold samples at 4C for 30 minutes, then heat shock at 42C for 30sec')
     protocol.comment('Finally, hold samples again at 4C for 2 minutes, then return plate(s) to their slot')
     protocol.pause('Once plate is returned, continue protocol to load SOC media')
     
     # Load SOC media into all of the necessary wells
-    above_transformation_wells = [well.top() for well in transformed_cells_map.values()]
-    pipette_lg.distribute(source=SOC,dest=above_transformation_wells,volume=170)
+    pipette_lg.transfer(source=SOC,
+                        dest=transformed_cells_map.values(),
+                        volume=170,
+                        new_tip='always',
+                        mix_after=(2,100)
+                        )
 
     protocol.comment('All cells loaded. Incubate at 37C for 15min if Amp resistant, and 60min otherwise')
     protocol.comment('Once incubated, plate each strain on selective agar and grow overnight')

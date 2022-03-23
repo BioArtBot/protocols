@@ -18,22 +18,22 @@ def read_args(explicit_args):
                         )
     parser.add_argument('--vector_plate', '-vp'
                         ,dest='%%VECTOR PLATE%%'
-                        ,default='nest_96_wellplate_100ul_pcr_full_skirt'
+                        ,default='nunc_96_well_plate_v_bottom'
                         ,help='Name of labware to use to hold the vector solutions. Use Opentrons standard names.'
                         )
     parser.add_argument('--transformation_plate', '-tp'
                         ,dest='%%TRANSFORMATION PLATE%%'
-                        ,default='nest_96_wellplate_200ul_flat'
+                        ,default='pcr_96_300ul_ondeepwell'
                         ,help='Name of labware to use to hold the transformation cells. Use Opentrons standard names.'
                         )
     parser.add_argument('--cells_plate', '-cp'
                         ,dest='%%CELLS PLATE%%'
-                        ,default='opentrons_24_tuberack_nest_1.5ml_snapcap'
+                        ,default='cryo_35_tuberack_2000ul'
                         ,help='Name of labware to use to hold the competant cells. Use Opentrons standard names.'
                         )
     parser.add_argument('--soc_plate', '-sp'
                         ,dest='%%SOC PLATE%%'
-                        ,default='opentrons_6_tuberack_falcon_50ml_conical'
+                        ,default='marburg_6_tuberack_50ml'
                         ,help='Name of labware to use to hold the SOC media. Use Opentrons standard names.'
                         )
     parser.add_argument('--small_pipette', '-smp'
