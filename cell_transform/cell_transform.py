@@ -32,6 +32,8 @@ metadata = {
 def run(protocol: protocol_api.ProtocolContext):
     vector_map = %%VECTOR PLATEMAP%%
     num_of_samples = len(vector_map) if vector_map else %%NUM OF VECTORS%%
+
+    multichannel = %%MULTICHANNEL MODE%%
     
     # a function that gets us the next available slot on the deck
     available_slots = range(11,0,-1)
@@ -81,9 +83,10 @@ def run(protocol: protocol_api.ProtocolContext):
     protocol.comment('Ensure you have matched the expected vector platemap:')
     
     # Load compentant cells. Expecting volume will be in 100ul to 2000ul range
-    competant_cells_plate = protocol.load_labware('%%CELLS PLATE%%', next(get_slot))
-    competant_cells = competant_cells_plate.wells("A1")
-    protocol.comment(f'Competant Cells -> {competant_cells}')
+    if not multichannel:
+        competant_cells_plate = protocol.load_labware('%%CELLS PLATE%%', next(get_slot))
+        competant_cells = competant_cells_plate.wells("A1")
+        protocol.comment(f'Competant Cells -> {competant_cells}')
 
     # Load SOC. Expecting volumes in 2ml - 30ml range
     SOC_plate = protocol.load_labware('%%SOC PLATE%%', next(get_slot))
@@ -106,17 +109,24 @@ def run(protocol: protocol_api.ProtocolContext):
         transformed_cells_map[vector] = next(get_transform_well)
 
     # Load competant cells into all of the necessary wells
-    pipette_sm.distribute(source=competant_cells,dest=list(transformed_cells_map.values()),volume=10)
+    if multichannel:
+        vol_per_well = 10
+        vol_in_start_column = math.ceil(len(transformed_cells_map) / 8) * vol_per_well
+        protocol.comment(f'ACTION: Before starting, load {vol_in_start_column}ul for competant cells into the first column of {vector_plate}')
+        wells_to_load = list(transformed_cells_map.values())[9:] #Skip first 9 wells bc they are already loaded
+        pipette_lg.distribute(vol_per_well, vector_plate.column(0), wells_to_load, new_tip='never')
+    else:
+        pipette_sm.distribute(source=competant_cells,dest=list(transformed_cells_map.values()),volume=10)
 
     # Load each vector into the appropriate well
-    for vector in vector_map:
-        pipette_sm.transfer(source=vector_map[vector],
-                             dest=transformed_cells_map[vector],
-                             volume=2,
-                             new_tip='always',
-                             touch_tip=True,
-                             mix_after=(2,3)
-                             )
+    transfer_pairs = {vector_map[key]: transformed_cells_map[key] for key in vector_map}
+    pipette_sm.transfer(source=transfer_pairs.keys(),
+                            dest=transfer_pairs.values(),
+                            volume=2,
+                            new_tip='always',
+                            touch_tip=True,
+                            mix_after=(2,3)
+                            )
 
     protocol.comment('Loading complete')
     protocol.comment('Hold samples at 4C for 30 minutes, then heat shock at 42C for 30sec')
