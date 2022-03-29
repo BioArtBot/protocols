@@ -105,23 +105,28 @@ def run(protocol: protocol_api.ProtocolContext):
         protocol.comment(f'{vector} -> {vector_map[vector]}')
 
     transformed_cells_map = dict()
+    vector_well_list = list()
+    transformed_cells_well_list = list()
     for vector in vector_map:
         transformed_cells_map[vector] = next(get_transform_well)
+        # ensure that vectors are explicitly listed in the same order in both plates
+        vector_well_list.append(vector_map[vector])
+        transformed_cells_well_list.append(transformed_cells_map[vector])
 
     # Load competant cells into all of the necessary wells
     if multichannel:
         vol_per_well = 10
         vol_in_start_column = math.ceil(len(transformed_cells_map) / 8) * vol_per_well
-        protocol.comment(f'ACTION: Before starting, load {vol_in_start_column}ul for competant cells into the first column of {vector_plate}')
+        transformed_cells_plate = transformed_cells_well_list[0].parent
+        protocol.comment(f'ACTION: Before starting, load {vol_in_start_column}ul of competant cells into the first column of {transformed_cells_plate}')
         wells_to_load = list(transformed_cells_map.values())[9:] #Skip first 9 wells bc they are already loaded
-        pipette_lg.distribute(vol_per_well, vector_plate.column(0), wells_to_load, new_tip='never')
+        pipette_lg.distribute(vol_per_well, transformed_cells_plate.columns(0), wells_to_load, new_tip='once')
     else:
         pipette_sm.distribute(source=competant_cells,dest=list(transformed_cells_map.values()),volume=10)
 
     # Load each vector into the appropriate well
-    transfer_pairs = {vector_map[key]: transformed_cells_map[key] for key in vector_map}
-    pipette_sm.transfer(source=transfer_pairs.keys(),
-                            dest=transfer_pairs.values(),
+    pipette_sm.transfer(source=vector_well_list,
+                            dest=transformed_cells_well_list,
                             volume=2,
                             new_tip='always',
                             touch_tip=True,
@@ -135,7 +140,7 @@ def run(protocol: protocol_api.ProtocolContext):
     
     # Load SOC media into all of the necessary wells
     pipette_lg.transfer(source=SOC,
-                        dest=transformed_cells_map.values(),
+                        dest=list(transformed_cells_map.values()),
                         volume=170,
                         new_tip='always',
                         mix_after=(2,100)
