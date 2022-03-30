@@ -1,0 +1,321 @@
+digraph _root {
+	compound=true
+	subgraph "cluster_https_//bbn.com/scratch/golden_gate_protocol" {
+		graph [label=golden_gate_protocol shape=box]
+		InitialNode1 -> CallBehaviorAction1:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction2:InputPin1 [color=black]
+		CallBehaviorAction1:"node" -> CallBehaviorAction2:"node" [color=blue]
+		CallBehaviorAction2:OutputPin1 -> CallBehaviorAction3:InputPin1 [color=black]
+		CallBehaviorAction2:"node" -> CallBehaviorAction3:"node" [color=blue]
+		CallBehaviorAction1:OutputPin1 -> ForkNode1 [color=black]
+		ForkNode1 -> CallBehaviorAction4:InputPin1 [color=black]
+		CallBehaviorAction3:"node" -> CallBehaviorAction4:"node" [color=blue]
+		CallBehaviorAction4:OutputPin1 -> CallBehaviorAction5:InputPin1 [color=black]
+		CallBehaviorAction4:"node" -> CallBehaviorAction5:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction6:InputPin1 [color=black]
+		CallBehaviorAction5:"node" -> CallBehaviorAction6:"node" [color=blue]
+		CallBehaviorAction6:OutputPin1 -> CallBehaviorAction7:InputPin1 [color=black]
+		CallBehaviorAction6:"node" -> CallBehaviorAction7:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction8:InputPin1 [color=black]
+		CallBehaviorAction7:"node" -> CallBehaviorAction8:"node" [color=blue]
+		CallBehaviorAction8:OutputPin1 -> CallBehaviorAction9:InputPin1 [color=black]
+		CallBehaviorAction8:"node" -> CallBehaviorAction9:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction10:InputPin1 [color=black]
+		CallBehaviorAction9:"node" -> CallBehaviorAction10:"node" [color=blue]
+		CallBehaviorAction10:OutputPin1 -> CallBehaviorAction11:InputPin1 [color=black]
+		CallBehaviorAction10:"node" -> CallBehaviorAction11:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction12:InputPin1 [color=black]
+		CallBehaviorAction11:"node" -> CallBehaviorAction12:"node" [color=blue]
+		CallBehaviorAction12:OutputPin1 -> CallBehaviorAction13:InputPin1 [color=black]
+		CallBehaviorAction12:"node" -> CallBehaviorAction13:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction14:InputPin1 [color=black]
+		CallBehaviorAction13:"node" -> CallBehaviorAction14:"node" [color=blue]
+		CallBehaviorAction14:OutputPin1 -> CallBehaviorAction15:InputPin1 [color=black]
+		CallBehaviorAction14:"node" -> CallBehaviorAction15:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction16:InputPin1 [color=black]
+		CallBehaviorAction15:"node" -> CallBehaviorAction16:"node" [color=blue]
+		CallBehaviorAction16:OutputPin1 -> CallBehaviorAction17:InputPin1 [color=black]
+		CallBehaviorAction16:"node" -> CallBehaviorAction17:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction18:InputPin1 [color=black]
+		CallBehaviorAction17:"node" -> CallBehaviorAction18:"node" [color=blue]
+		CallBehaviorAction18:OutputPin1 -> CallBehaviorAction19:InputPin1 [color=black]
+		ForkNode2 -> CallBehaviorAction19:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction20:InputPin1 [color=black]
+		CallBehaviorAction19:"node" -> CallBehaviorAction20:"node" [color=blue]
+		CallBehaviorAction20:OutputPin1 -> CallBehaviorAction21:InputPin1 [color=black]
+		ForkNode4 -> CallBehaviorAction21:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction22:InputPin1 [color=black]
+		CallBehaviorAction21:"node" -> CallBehaviorAction22:"node" [color=blue]
+		CallBehaviorAction22:OutputPin1 -> CallBehaviorAction23:InputPin1 [color=black]
+		ForkNode5 -> CallBehaviorAction23:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction24:InputPin1 [color=black]
+		CallBehaviorAction23:"node" -> CallBehaviorAction24:"node" [color=blue]
+		CallBehaviorAction24:OutputPin1 -> CallBehaviorAction25:InputPin1 [color=black]
+		ForkNode6 -> CallBehaviorAction25:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction26:InputPin1 [color=black]
+		CallBehaviorAction25:"node" -> CallBehaviorAction26:"node" [color=blue]
+		CallBehaviorAction26:OutputPin1 -> CallBehaviorAction27:InputPin1 [color=black]
+		ForkNode7 -> CallBehaviorAction27:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction28:InputPin1 [color=black]
+		CallBehaviorAction27:"node" -> CallBehaviorAction28:"node" [color=blue]
+		CallBehaviorAction28:OutputPin1 -> CallBehaviorAction29:InputPin1 [color=black]
+		ForkNode8 -> CallBehaviorAction29:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction30:InputPin1 [color=black]
+		CallBehaviorAction29:"node" -> CallBehaviorAction30:"node" [color=blue]
+		CallBehaviorAction30:OutputPin1 -> CallBehaviorAction31:InputPin1 [color=black]
+		ForkNode9 -> CallBehaviorAction31:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction32:InputPin1 [color=black]
+		CallBehaviorAction31:"node" -> CallBehaviorAction32:"node" [color=blue]
+		CallBehaviorAction32:OutputPin1 -> CallBehaviorAction33:InputPin1 [color=black]
+		ForkNode10 -> CallBehaviorAction33:"node" [color=blue]
+		ForkNode1 -> CallBehaviorAction34:InputPin1 [color=black]
+		CallBehaviorAction33:"node" -> CallBehaviorAction34:"node" [color=blue]
+		ForkNode3 -> CallBehaviorAction35:InputPin2 [color=black]
+		CallBehaviorAction18:"node" -> ForkNode2 [color=black]
+		ForkNode2 -> CallBehaviorAction35:InputPin1 [color=black]
+		CallBehaviorAction34:"node" -> CallBehaviorAction35:"node" [color=blue]
+		CallBehaviorAction34:OutputPin1 -> ForkNode3 [color=black]
+		ForkNode3 -> CallBehaviorAction36:InputPin2 [color=black]
+		CallBehaviorAction20:"node" -> ForkNode4 [color=black]
+		ForkNode4 -> CallBehaviorAction36:InputPin1 [color=black]
+		CallBehaviorAction35:"node" -> CallBehaviorAction36:"node" [color=blue]
+		ForkNode3 -> CallBehaviorAction37:InputPin2 [color=black]
+		CallBehaviorAction22:"node" -> ForkNode5 [color=black]
+		ForkNode5 -> CallBehaviorAction37:InputPin1 [color=black]
+		CallBehaviorAction36:"node" -> CallBehaviorAction37:"node" [color=blue]
+		ForkNode3 -> CallBehaviorAction38:InputPin2 [color=black]
+		CallBehaviorAction24:"node" -> ForkNode6 [color=black]
+		ForkNode6 -> CallBehaviorAction38:InputPin1 [color=black]
+		CallBehaviorAction37:"node" -> CallBehaviorAction38:"node" [color=blue]
+		ForkNode3 -> CallBehaviorAction39:InputPin2 [color=black]
+		CallBehaviorAction26:"node" -> ForkNode7 [color=black]
+		ForkNode7 -> CallBehaviorAction39:InputPin1 [color=black]
+		CallBehaviorAction38:"node" -> CallBehaviorAction39:"node" [color=blue]
+		ForkNode3 -> CallBehaviorAction40:InputPin2 [color=black]
+		CallBehaviorAction28:"node" -> ForkNode8 [color=black]
+		ForkNode8 -> CallBehaviorAction40:InputPin1 [color=black]
+		CallBehaviorAction39:"node" -> CallBehaviorAction40:"node" [color=blue]
+		ForkNode3 -> CallBehaviorAction41:InputPin2 [color=black]
+		CallBehaviorAction30:"node" -> ForkNode9 [color=black]
+		ForkNode9 -> CallBehaviorAction41:InputPin1 [color=black]
+		CallBehaviorAction40:"node" -> CallBehaviorAction41:"node" [color=blue]
+		ForkNode3 -> CallBehaviorAction42:InputPin2 [color=black]
+		CallBehaviorAction32:"node" -> ForkNode10 [color=black]
+		ForkNode10 -> CallBehaviorAction42:InputPin1 [color=black]
+		CallBehaviorAction41:"node" -> CallBehaviorAction42:"node" [color=blue]
+		ForkNode3 -> CallBehaviorAction43:InputPin2 [color=black]
+		ForkNode8 -> CallBehaviorAction43:InputPin1 [color=black]
+		CallBehaviorAction42:"node" -> CallBehaviorAction43:"node" [color=blue]
+		ForkNode3 -> CallBehaviorAction44:InputPin2 [color=black]
+		ForkNode10 -> CallBehaviorAction44:InputPin1 [color=black]
+		CallBehaviorAction43:"node" -> CallBehaviorAction44:"node" [color=blue]
+		ForkNode3 -> ActivityParameterNode1 [color=black]
+		CallBehaviorAction44:"node" -> ActivityParameterNode1 [color=blue]
+		CallBehaviorAction1 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">specification: plateRequirement</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">EmptyContainer</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		InitialNode1 [label="" fillcolor=black shape=circle style=filled]
+		CallBehaviorAction2 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: A1:B1</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction3 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: BIOBRICK, plasmid backbone, kanamicyn resistent</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 5.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction4 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: C1:D1</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		ForkNode1 [label="" fillcolor=black height=0.02 shape=rectangle style=filled]
+		CallBehaviorAction5 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: BIOBRICK, promoter+rbs, chloro resistent</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 5.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction6 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: E1:F1</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction7 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: BIOBRICK, GFP coding sequence</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 5.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction8 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: G1:H1</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction9 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: BIOBRICK, sequence terminator, chloro resistent</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 5.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction10 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: A2:B2</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction11 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: enzyme, cut in selected parts, bsaI</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 5.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction12 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: C2:D2</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction13 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: buffer_T4, enzyme ligase, NEB</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 5.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction14 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: E2:F2</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction15 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: enzyme, bind sequences, needs buffer T4</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 5.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction16 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: G2:H2</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction17 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: pure water, fills up to 10 ul</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 10.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction18 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: A1:B1</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction19 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: BIOBRICK, plasmid backbone, kanamicyn resistent</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 5.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction20 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: C1:D1</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction21 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: BIOBRICK, promoter+rbs, chloro resistent</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 5.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction22 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: E1:F1</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction23 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: BIOBRICK, GFP coding sequence</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 5.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction24 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: G1:H1</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction25 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: BIOBRICK, sequence terminator, chloro resistent</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 5.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction26 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: A2:B2</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction27 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: enzyme, cut in selected parts, bsaI</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 5.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction28 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: C2:D2</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction29 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: buffer_T4, enzyme ligase, NEB</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 5.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction30 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: E2:F2</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction31 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: enzyme, bind sequences, needs buffer T4</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 5.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction32 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: G2:H2</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction33 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="ValuePin1" border="1">resource: pure water, fills up to 10 ul</td><td> </td><td port="InputPin1" border="1">destination</td><td> </td><td port="ValuePin2" border="1">amount: 10.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Provision</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction34 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="ValuePin1" border="1">coordinates: A3:B3</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">PlateCoordinates</td></tr>
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="OutputPin1" border="1">samples</td><td> </td></tr></table></td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction35 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="InputPin2" border="1">destination</td><td> </td><td port="ValuePin1" border="1">amount: 1.0 microliter</td><td> </td><td port="ValuePin2" border="1">dispenseVelocity: 2.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Transfer</td></tr>
+</table>> shape=none style=rounded]
+		ForkNode2 [label="" fillcolor=black height=0.02 shape=rectangle style=filled]
+		CallBehaviorAction36 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="InputPin2" border="1">destination</td><td> </td><td port="ValuePin1" border="1">amount: 1.0 microliter</td><td> </td><td port="ValuePin2" border="1">dispenseVelocity: 2.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Transfer</td></tr>
+</table>> shape=none style=rounded]
+		ForkNode3 [label="" fillcolor=black height=0.02 shape=rectangle style=filled]
+		ForkNode4 [label="" fillcolor=black height=0.02 shape=rectangle style=filled]
+		CallBehaviorAction37 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="InputPin2" border="1">destination</td><td> </td><td port="ValuePin1" border="1">amount: 1.0 microliter</td><td> </td><td port="ValuePin2" border="1">dispenseVelocity: 2.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Transfer</td></tr>
+</table>> shape=none style=rounded]
+		ForkNode5 [label="" fillcolor=black height=0.02 shape=rectangle style=filled]
+		CallBehaviorAction38 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="InputPin2" border="1">destination</td><td> </td><td port="ValuePin1" border="1">amount: 1.0 microliter</td><td> </td><td port="ValuePin2" border="1">dispenseVelocity: 2.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Transfer</td></tr>
+</table>> shape=none style=rounded]
+		ForkNode6 [label="" fillcolor=black height=0.02 shape=rectangle style=filled]
+		CallBehaviorAction39 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="InputPin2" border="1">destination</td><td> </td><td port="ValuePin1" border="1">amount: 1.0 microliter</td><td> </td><td port="ValuePin2" border="1">dispenseVelocity: 2.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Transfer</td></tr>
+</table>> shape=none style=rounded]
+		ForkNode7 [label="" fillcolor=black height=0.02 shape=rectangle style=filled]
+		CallBehaviorAction40 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="InputPin2" border="1">destination</td><td> </td><td port="ValuePin1" border="1">amount: 1.0 microliter</td><td> </td><td port="ValuePin2" border="1">dispenseVelocity: 2.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Transfer</td></tr>
+</table>> shape=none style=rounded]
+		ForkNode8 [label="" fillcolor=black height=0.02 shape=rectangle style=filled]
+		CallBehaviorAction41 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="InputPin2" border="1">destination</td><td> </td><td port="ValuePin1" border="1">amount: 1.0 microliter</td><td> </td><td port="ValuePin2" border="1">dispenseVelocity: 2.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Transfer</td></tr>
+</table>> shape=none style=rounded]
+		ForkNode9 [label="" fillcolor=black height=0.02 shape=rectangle style=filled]
+		CallBehaviorAction42 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="InputPin2" border="1">destination</td><td> </td><td port="ValuePin1" border="1">amount: 1.0 microliter</td><td> </td><td port="ValuePin2" border="1">dispenseVelocity: 2.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Transfer</td></tr>
+</table>> shape=none style=rounded]
+		ForkNode10 [label="" fillcolor=black height=0.02 shape=rectangle style=filled]
+		CallBehaviorAction43 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="InputPin2" border="1">destination</td><td> </td><td port="ValuePin1" border="1">amount: 2.0 microliter</td><td> </td><td port="ValuePin2" border="1">dispenseVelocity: 2.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Transfer</td></tr>
+</table>> shape=none style=rounded]
+		CallBehaviorAction44 [label=<<table border="0" cellspacing="0">
+  <tr><td><table border="0" cellspacing="-2"><tr><td> </td><td port="InputPin1" border="1">source</td><td> </td><td port="InputPin2" border="1">destination</td><td> </td><td port="ValuePin1" border="1">amount: 4.0 microliter</td><td> </td><td port="ValuePin2" border="1">dispenseVelocity: 2.0 microliter</td><td> </td></tr></table></td></tr>
+  <tr><td port="node" border="1">Transfer</td></tr>
+</table>> shape=none style=rounded]
+		ActivityParameterNode1 [label=constructs peripheries=2 shape=rectangle]
+	}
+}
