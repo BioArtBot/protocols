@@ -226,25 +226,7 @@ def assemble_components(protocol, component, goldengate_build_wells):
     protocol.primitive_step('TransferInto', source=component, destination=goldengate_build_wells.output_pin('samples'), 
     amount=sbol3.Measure(1, tyto.OM.microliter), dispenseVelocity=sbol3.OM_MEASURE(20, tyto.OM.minute)) 
 
-
-# after this step  the liquid handling part is over. The next procedure will be incubation on a thermocycler followed by 
-# transformation on competent cells
-
-
-# incubation protocol by rapid thermocycling (https://www.protocols.io/view/golden-gate-lvl-0-b2k4qcyw)
-
-# TODO: implement the 'temperature change' primitive step (ask jake/dan about implementing it on the markdown specialization and PAML package)
-# TODO: write down the cool down time (ask jake/dan)
-def Incubate_assembled_samples(protocol, goldengate_build_wells) -> None: 
-    
-    
-    protocol.primitive_step('Incubate', location=goldengate_build_wells .output_pin('samples'),
-                        duration=sbol3.Measure(1,3 , tyto.OM.minute),
-                        temperature=sbol3.Measure(37, tyto.OM.get_uri_by_term('degree Celsius'))) 
-    protocol.primitive_step('Incubate', location=goldengate_build_wells.output_pin('samples'),
-                        duration=sbol3.Measure(3 , tyto.OM.minute),
-                        temperature=sbol3.Measure(16, tyto.OM.get_uri_by_term('degree Celsius')))
-
+# after this step  the liquid handling part is over. The next procedure will be incubation on a thermocycler followed by trnasformation
 
 #############################################
  # set up the document
@@ -343,6 +325,15 @@ def golden_gate_protocol() -> Tuple[paml.Protocol, Document]:
     protocol.order(protocol.get_last_step(), output)
     
     return protocol, doc  # don't return until all else is complete
+
+# the protocol needs to be updated with the 'temperature change' primitive for it to be possible to include the thermocycling steps
+
+# incubation protocol by rapid improved thermocycling (https://www.protocols.io/view/golden-gate-lvl-0-b2k4qcyw)
+
+# transformation procedure (https://cafgroup.lbl.gov/protocols/general-molecular-biology/chemically-competent)
+
+# TODO: implement the 'temperature change' primitive step (ask jake/dan about implementing it on the markdown specialization and PAML package)
+# TODO: write down the cool down time (ask jake/dan)
 
 
 ########################################
