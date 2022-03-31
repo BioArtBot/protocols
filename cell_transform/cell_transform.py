@@ -104,6 +104,7 @@ def run(protocol: protocol_api.ProtocolContext):
     for vector in vector_map:
         protocol.comment(f'{vector} -> {vector_map[vector]}')
 
+    #TODO Remap from vector plate to transformed cells plate
     transformed_cells_map = dict()
     vector_well_list = list()
     transformed_cells_well_list = list()
