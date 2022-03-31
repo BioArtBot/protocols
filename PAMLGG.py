@@ -217,14 +217,14 @@ def provision_water(protocol: paml.Protocol, plate, water):
 def assemble_buffer_and_water(protocol:paml.Protocol,c_buffer,c_water,goldengate_build_wells) -> None:
    
     protocol.primitive_step('TransferInto', source=c_buffer, destination=goldengate_build_wells.output_pin('samples'), 
-    amount=sbol3.Measure(2, tyto.OM.microliter), dispenseVelocity=sbol3.OM_MEASURE(20, tyto.OM.minute)) 
+                            amount=sbol3.Measure(2, tyto.OM.microliter), dispenseVelocity=sbol3.Measure(20, tyto.OM.minute)) 
 
     protocol.primitive_step('TransferInto', source=c_water, destination=goldengate_build_wells.output_pin('samples'), 
-    amount=sbol3.Measure(4, tyto.OM.microliter), dispenseVelocity=sbol3.OM_MEASURE(20, tyto.OM.minute)) 
+                            amount=sbol3.Measure(4, tyto.OM.microliter), dispenseVelocity=sbol3.Measure(20, tyto.OM.minute))
 
-def assemble_components(protocol, component, goldengate_build_wells):
+def assemble_components(protocol, component, goldengate_build_wells) -> None:
     protocol.primitive_step('TransferInto', source=component, destination=goldengate_build_wells.output_pin('samples'), 
-    amount=sbol3.Measure(1, tyto.OM.microliter), dispenseVelocity=sbol3.OM_MEASURE(20, tyto.OM.minute)) 
+                            amount=sbol3.Measure(1, tyto.OM.microliter), dispenseVelocity=sbol3.Measure(20, tyto.OM.minute)) 
 
 # after this step  the liquid handling part is over. The next procedure will be incubation on a thermocycler followed by trnasformation
 
