@@ -61,13 +61,13 @@ def run(protocol: protocol_api.ProtocolContext):
         """
         Sorts the platemap by well position
         This is necessary for row because a multichannel pipette always
-        pipettes all the rows in the same order. We also sort the columns
+        pipettes all the rows in the same order. We sort the columns
         as well, because it's just nice to not arbitrarily have your
         columns mixed up on the new plate.
         """
-        sorted_by_column = sorted(platemap.items(), key=lambda x: int(x[1][1:]))
-        sorted_by_r_and_c = sorted(sorted_by_column, key=lambda x: x[1][:1])
-        return {k: v for k, v in sorted_by_r_and_c}
+        sorted_by_row = sorted(platemap.items(), key=lambda x: x[1][:1])
+        sorted_by_row_n_col = sorted(sorted_by_row, key=lambda x: int(x[1][1:]))
+        return {k: v for k, v in sorted_by_row_n_col}
 
     get_vector_well = well_generator('%%VECTOR PLATE%%')
     get_transform_well = well_generator('%%TRANSFORMATION PLATE%%')
