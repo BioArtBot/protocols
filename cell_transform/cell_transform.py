@@ -1,6 +1,7 @@
 from opentrons import protocol_api
 import math
 import datetime
+import csv
 
 metadata = {
     'apiLevel': '2.8',
@@ -114,15 +115,21 @@ def run(protocol: protocol_api.ProtocolContext):
         vector_map = map_sort(vector_map)
         vector_plate = protocol.load_labware('%%VECTOR PLATE%%', next(get_slot))
         for vector in vector_map:
-            vector_map[vector] = vector_plate.wells(vector_map[vector])
+            vector_map[vector] = vector_plate.wells_by_name()[vector_map[vector]]
     for vector in vector_map:
         protocol.comment(f'{vector} -> {vector_map[vector]}')
+
+    if multichannel: transformation_plate = protocol.load_labware('%%TRANSFORMATION PLATE%%', next(get_slot))
 
     transformed_cells_map = dict()
     vector_well_list = list()
     transformed_cells_well_list = list()
     for vector in vector_map:
-        transformed_cells_map[vector] = next(get_transform_well)
+        if multichannel:
+            #multichannel mode only supports directly mapping from one plate to another
+            transformed_cells_map[vector] = transformation_plate.wells_by_name()[vector_map[vector].well_name]
+        else:
+            transformed_cells_map[vector] = next(get_transform_well)
         # ensure that vectors are explicitly listed in the same order in both plates
         vector_well_list.append(vector_map[vector])
         transformed_cells_well_list.append(transformed_cells_map[vector])
@@ -172,7 +179,7 @@ def run(protocol: protocol_api.ProtocolContext):
         writer = csv.writer(csvfile)
         writer.writerow(['Vector', 'Vector Plate Well', 'Transformed Cell Plate Well'])
         for vector in transformed_cells_map:
-            writer.writerow([vector, vector_map[vector], transformed_cells_map[vector]])
+            writer.writerow([vector, vector_map[vector].well_name, transformed_cells_map[vector].well_name])
     csvfile.close()
     protocol.comment(f'Output CSV map is saved as {filename} ON the robot.')
     protocol.comment('This file will persist until the robot is turned off')

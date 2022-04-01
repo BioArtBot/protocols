@@ -76,7 +76,7 @@ def read_args(explicit_args):
 
     args['%%MULTICHANNEL MODE%%'] = 'False'
     if args['%%LARGE PIPETTE%%'] == 'p300_multi_gen2' or args['%%SMALL PIPETTE%%'] == 'p20_multi_gen2':
-        args['%%SOC PLATE%%'] = 'usascientific_12_reservoir_22ml'
+        args['%%SOC PLATE%%'] = 'nest_12_reservoir_15ml'
         args['%%MULTICHANNEL MODE%%'] = 'True'
         logging.info(f'Inferring media container as `{args["%%SOC PLATE%%"]}` based on use of multichannel pipette')
         logging.warning(f'NOTE: Because a multichannel pipette is used, you must load competent cells into all of column A before running this protocol.')
