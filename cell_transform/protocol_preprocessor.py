@@ -66,12 +66,21 @@ def read_args(explicit_args):
                                 'p1000_single_gen2':'opentrons_96_tiprack_1000ul'
                                 ,'p300_single_gen2':'opentrons_96_tiprack_300ul'
                                 ,'p20_single_gen2':'opentrons_96_tiprack_20ul'
+                                ,'p300_multi_gen2':'opentrons_96_tiprack_300ul'
+                                ,'p20_multi_gen2':'opentrons_96_tiprack_20ul'
                                 }[args[f'%%{size} PIPETTE%%']]
             logging.info(f'Inferring tiprack as `{args[f"%%{size} TIPRACK%%"]}` based on pipette')
 
     if not args['%%VECTOR PLATEMAP%%'] and not args['%%NUM OF VECTORS%%']:
         raise(AttributeError, "No vector info was provided. use `python protocol_preprocessor.py --help` for more info")
 
+    args['%%MULTICHANNEL MODE%%'] = 'False'
+    if args['%%LARGE PIPETTE%%'] == 'p300_multi_gen2' or args['%%SMALL PIPETTE%%'] == 'p20_multi_gen2':
+        args['%%SOC PLATE%%'] = 'usascientific_12_reservoir_22ml'
+        args['%%MULTICHANNEL MODE%%'] = 'True'
+        logging.info(f'Inferring media container as `{args["%%SOC PLATE%%"]}` based on use of multichannel pipette')
+        logging.warning(f'NOTE: Because a multichannel pipette is used, you must load competent cells into all of column A before running this protocol.')
+    
     return args
 
 
