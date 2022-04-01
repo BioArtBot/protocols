@@ -57,6 +57,18 @@ def run(protocol: protocol_api.ProtocolContext):
             for well in plate.wells():
                 yield well
 
+    def map_sort(platemap):
+        """
+        Sorts the platemap by well position
+        This is necessary for row because a multichannel pipette always
+        pipettes all the rows in the same order. We also sort the columns
+        as well, because it's just nice to not arbitrarily have your
+        columns mixed up on the new plate.
+        """
+        sorted_by_column = sorted(platemap.items(), key=lambda x: int(x[1][1:]))
+        sorted_by_r_and_c = sorted(sorted_by_column, key=lambda x: x[1][:1])
+        return {k: v for k, v in sorted_by_r_and_c}
+
     get_vector_well = well_generator('%%VECTOR PLATE%%')
     get_transform_well = well_generator('%%TRANSFORMATION PLATE%%')
 
@@ -98,13 +110,14 @@ def run(protocol: protocol_api.ProtocolContext):
         for vector in range(num_of_samples):
             vector_map[f'VECTOR {vector}'] = next(get_vector_well)
     else:
+        # Ensure the vectormap is in plate order
+        vector_map = map_sort(vector_map)
         vector_plate = protocol.load_labware('%%VECTOR PLATE%%', next(get_slot))
         for vector in vector_map:
             vector_map[vector] = vector_plate.wells(vector_map[vector])
     for vector in vector_map:
         protocol.comment(f'{vector} -> {vector_map[vector]}')
 
-    #TODO Remap from vector plate to transformed cells plate
     transformed_cells_map = dict()
     vector_well_list = list()
     transformed_cells_well_list = list()
@@ -152,3 +165,14 @@ def run(protocol: protocol_api.ProtocolContext):
     protocol.comment('Transformed strains are in the following wells:')
     for vector in transformed_cells_map:
         protocol.comment(f'{vector} -> {transformed_cells_map[vector]}')
+
+
+    filename = f'CELL_TRANSFORM_PLATEMAP_{datetime.datetime.now().strftime("%Y%m%d-%H%M%S")}.csv'
+    with open(filename, 'w') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['Vector', 'Vector Plate Well', 'Transformed Cell Plate Well'])
+        for vector in transformed_cells_map:
+            writer.writerow([vector, vector_map[vector], transformed_cells_map[vector]])
+    csvfile.close()
+    protocol.comment(f'Output CSV map is saved as {filename} ON the robot.')
+    protocol.comment('This file will persist until the robot is turned off')
