@@ -137,11 +137,11 @@ def run(protocol: protocol_api.ProtocolContext):
     # Load competant cells into all of the necessary wells
     if multichannel:
         vol_per_well = 10
-        vol_in_start_column = math.ceil(len(transformed_cells_map) / 8) * vol_per_well
+        vol_in_start_column = math.ceil(len(transformed_cells_map) / 8) * vol_per_well + (math.ceil(len(transformed_cells_map) / 8)) #add extra vol for blowout
         transformed_cells_plate = transformed_cells_well_list[0].parent
         protocol.comment(f'ACTION: Before starting, load {vol_in_start_column}ul of competant cells into the first column of {transformed_cells_plate}')
-        wells_to_load = list(transformed_cells_map.values())[9:] #Skip first 9 wells bc they are already loaded
-        pipette_lg.distribute(vol_per_well, transformed_cells_plate.columns(0), wells_to_load, new_tip='once')
+        wells_to_load = list(transformed_cells_map.values())[8:] #Skip first 9 wells bc they are already loaded
+        pipette_sm.distribute(vol_per_well, transformed_cells_plate.columns(0), wells_to_load, new_tip='once')
     else:
         pipette_sm.distribute(source=competant_cells,dest=list(transformed_cells_map.values()),volume=10)
 
