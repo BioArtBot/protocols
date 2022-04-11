@@ -1,0 +1,88 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+"""Opentrons python protocol adapted from """
+
+from opentrons import protocol_api
+
+metadata = {
+    "protocolName": "Screening from inoculated culture",
+    "author": "YHK",
+    "description": "Miniprep from culture in 96 deep-well plate",
+    'apiLevel': '2.11'}
+
+def run(protocol: protocol_api.ProtocolContext):
+    pellet = protocol.load_labware('nest_96_wellplate_2ml_deep', 2)
+    buffer_mini = protocol.load_labware('nest_96_wellplate_2ml_deep', 4)
+
+    tiprack = protocol.load_labware('opentrons_96_tiprack_200ul', 2)
+    tiprack2 = protocol.load_labware('opentrons_96_tiprack_1000ul', 5)
+
+    p300 = protocol.load_instrument('p300_multi_gen2', 'right', tip_racks=[tiprack, tiprack2, tiprack3,tiprack4])
+    p1000 = protocol.load_instrument('p1000_single_gen2', 'left', tip_racks=[tiprack, tiprack2, tiprack3,tiprack4])
+
+    '''Instruction for transfer of 2ul solution from 96well to agar plate. For second for loop, 1.25 correspond to 4.5mm'''
+    
+    # fonction for the transfert 350ul of buffer to the plate
+    def plating(s,d):
+        p300.aspirate(350, s)
+        p300.move_to(d.bottom())
+        p300.dispense(350,d)    
+
+
+    # loop to transfert solution from buffer to pellet with mixing
+    for i in range(12):
+        p300.pick_up_tip()
+        source = buffer_mini.wells()[8*i]
+        dest = pellet.wells()[8*i]
+        p300.aspirate(200, source)
+        p300.move_to(dest.top())
+        p300.dispense(200, dest)
+        p300.mix(5, dest)
+        p300.aspirate(150, source)
+        p300.move_to(dest.top())
+        p300.dispense(150, dest)
+        p300.blow_out(dest.top())
+        p300.return_tip()
+
+    # loop for P2
+
+    for i in range(12):
+        p300.pick_up_tip()
+        source = buffer_mini.wells()[8*i]
+        dest = pellet.wells()[8*i]
+        p300.aspirate(200, source)
+        p300.move_to(dest.top())
+        p300.dispense(200, dest)
+        p300.mix(5, dest)
+        p300.aspirate(150, source)
+        p300.move_to(dest.top())
+        p300.dispense(150, dest)
+        p300.blow_out(dest.top())
+        p300.return_tip()  
+
+    # Pause for 5min
+    protocol.pause('4 minutes')
+
+
+        for i in range(12):
+        p300.pick_up_tip()
+        source = buffer_mini.wells()[8*i]
+        dest = pellet.wells()[8*i]
+        p300.aspirate(200, source)
+        p300.move_to(dest.top())
+        p300.dispense(200, dest)
+        p300.mix(5, dest)
+        p300.aspirate(150, source)
+        p300.move_to(dest.top())
+        p300.dispense(150, dest)
+        p300.blow_out(dest.top())
+        p300.return_tip()     
+
+    # transfert of 900ul of buffer to the plate
+    for i in range(96):
+        p1000.pick_up_tip()
+        source = buffer_mini.wells()[i]
+        dest = pellet.wells()[i]
+        plating(source,dest)
+        p1000.return_tip()

@@ -1,0 +1,78 @@
+# -*- coding: utf-8 -*-
+
+"""Opentrons python protocol adapted from """
+
+from opentrons import protocol_api
+
+metadata = {
+    "protocolName": "Screening from inoculated culture",
+    "author": "YHK",
+    "description": "From culture in 96 deep-well plate, transfert into agar plate in 384 format",
+    'apiLevel': '2.11'}
+
+
+def run(protocol: protocol_api.ProtocolContext):
+    yeast_sample_well = protocol.load_labware('nest_96_wellplate_2ml_deep', 1)
+    yeast_sample_well_2 = protocol.load_labware('nest_96_wellplate_2ml_deep', 4)
+    yeast_sample_well_3 = protocol.load_labware('nest_96_wellplate_2ml_deep', 7)
+    yeast_sample_well_4 = protocol.load_labware('nest_96_wellplate_2ml_deep', 10)
+
+    ##plate_384 = protocol.load_labware('grid_384well_epp', 3)
+    ##plate_384_1mg = protocol.load_labware('grid_384well_epp', 6)
+    ##plate_384_4mg = protocol.load_labware('grid_384well_epp', 9)
+
+    plate_384 = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 3)
+    plate_384_1mg = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 6)
+    plate_384_4mg = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 9)
+
+    tiprack = protocol.load_labware('opentrons_96_tiprack_20ul', 2)
+    tiprack2 = protocol.load_labware('opentrons_96_tiprack_20ul', 5)
+    tiprack3 = protocol.load_labware('opentrons_96_tiprack_20ul', 8)
+    tiprack4 = protocol.load_labware('opentrons_96_tiprack_20ul', 11)
+    p20 = protocol.load_instrument('p20_multi_gen2', 'right', tip_racks=[tiprack, tiprack2, tiprack3,tiprack4])
+    
+    '''Instruction for transfer of 2ul solution from 96well to agar plate. For second for loop, 1.25 correspond to 4.5mm'''
+
+    def plating(s,d):
+        p20.aspirate(2, s)
+        p20.move_to(d.bottom())
+        p20.dispense(2,d)
+
+    def plating_cartesian(s,d):
+        p20.aspirate(2, s)
+        p20.move_to(d)
+        p20.dispense(2,d)
+
+    plates = [plate_384.wells(), plate_384_1mg.wells(), plate_384_4mg.wells()]
+
+    for i in range(12): 
+        p20.pick_up_tip()
+        for y in plates:
+            source = yeast_sample_well.wells()[8*i]
+            dest = y[16*i]
+            plating(source,dest)
+        p20.return_tip()
+
+    for i in range(12): 
+        p20.pick_up_tip()
+        for y in plates:   
+            source = yeast_sample_well_2.wells()[8*i]
+            dest = y[16*i+192]
+            plating(source,dest)
+        p20.return_tip()
+
+    for i in range(12):  
+        p20.pick_up_tip()
+        for i in range(12):    
+            source = yeast_sample_well_3.wells [8*i]
+            dest = y[16*i].from_center_cartesian(0,-1.25,-1)
+            plating(source,dest)
+        p20.return_tip()
+
+     for y in plates:
+        p20.pick_up_tip()
+        for i in range(12):    
+            source = yeast_sample_well_4.wells [8*i]
+            dest = y[16*i+192].from_center_cartesian(0,-1.25,-1)
+            plating(source,dest)
+        p20.return_tip()
