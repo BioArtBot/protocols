@@ -13,76 +13,109 @@ metadata = {
 
 def run(protocol: protocol_api.ProtocolContext):
     pellet = protocol.load_labware('nest_96_wellplate_2ml_deep', 2)
-    buffer_mini = protocol.load_labware('nest_96_wellplate_2ml_deep', 4)
+    supernatant = protocol.load_labware('nest_96_wellplate_2ml_deep', 1
+    )
+    buffer_mini = protocol.load_labware('nest_12_reservoir_15ml', 4)
+    isopropanol = protocol.load_labware('brand_1_reservoir_8000ul', 7)
+    ethanol = protocol.load_labware('brand_1_reservoir_8000ul', 8)
+
 
     tiprack = protocol.load_labware('opentrons_96_tiprack_200ul', 2)
-    tiprack2 = protocol.load_labware('opentrons_96_tiprack_1000ul', 5)
+    tiprack2 = protocol.load_labware('opentrons_96_tiprack_200ul', 5)
+    tiprack3 = protocol.load_labware('opentrons_96_tiprack_200ul', 3)
 
-    p300 = protocol.load_instrument('p300_multi_gen2', 'right', tip_racks=[tiprack, tiprack2, tiprack3,tiprack4])
-    p1000 = protocol.load_instrument('p1000_single_gen2', 'left', tip_racks=[tiprack, tiprack2, tiprack3,tiprack4])
-
-    '''Instruction for transfer of 2ul solution from 96well to agar plate. For second for loop, 1.25 correspond to 4.5mm'''
+    p300 = protocol.load_instrument('p300_multi_gen2', 'right', tip_racks=[tiprack, tiprack2, tiprack3])
     
-    # fonction for the transfert 350ul of buffer to the plate
-    def plating(s,d):
-        p300.aspirate(350, s)
-        p300.move_to(d.bottom())
-        p300.dispense(350,d)    
-
-
     # loop to transfert solution from buffer to pellet with mixing
     for i in range(12):
         p300.pick_up_tip()
-        source = buffer_mini.wells()[8*i]
-        dest = pellet.wells()[8*i]
-        p300.aspirate(200, source)
-        p300.move_to(dest.top())
-        p300.dispense(200, dest)
-        p300.mix(5, dest)
-        p300.aspirate(150, source)
-        p300.move_to(dest.top())
-        p300.dispense(150, dest)
-        p300.blow_out(dest.top())
+        source = buffer_mini.wells()[0,1,2]
+        dest = pellet.columns()[i]
+        p300.transfer(350, source, dest, new_tip = 'never')
+        p300.mix(5, 200, dest)
         p300.return_tip()
 
     # loop for P2
 
     for i in range(12):
         p300.pick_up_tip()
-        source = buffer_mini.wells()[8*i]
-        dest = pellet.wells()[8*i]
-        p300.aspirate(200, source)
-        p300.move_to(dest.top())
-        p300.dispense(200, dest)
-        p300.mix(5, dest)
-        p300.aspirate(150, source)
-        p300.move_to(dest.top())
-        p300.dispense(150, dest)
-        p300.blow_out(dest.top())
+        source = buffer_mini.wells()[3,4,5]
+        dest = pellet.columns()[i]
+        p300.transfer(350, source, dest, new_tip = 'never')
+        p300.mix(5, 200, dest, rate=2.5)
         p300.return_tip()  
 
-    # Pause for 5min
-    protocol.pause('4 minutes')
+    # Pause for 4min
+    protocol.delay(minutes=4)
 
 
-        for i in range(12):
+    # inactivation of the lysis by adding 350uL P3
+
+    for i in range(12):
         p300.pick_up_tip()
-        source = buffer_mini.wells()[8*i]
-        dest = pellet.wells()[8*i]
-        p300.aspirate(200, source)
-        p300.move_to(dest.top())
-        p300.dispense(200, dest)
-        p300.mix(5, dest)
-        p300.aspirate(150, source)
-        p300.move_to(dest.top())
-        p300.dispense(150, dest)
-        p300.blow_out(dest.top())
+        source = buffer_mini.wells()[6,7,8]
+        dest = pellet.columns()[i]
+        p300.transfer(350, source, dest, new_tip = 'never')
+        p300.mix(5, 200, dest)
         p300.return_tip()     
 
-    # transfert of 900ul of buffer to the plate
-    for i in range(96):
-        p1000.pick_up_tip()
-        source = buffer_mini.wells()[i]
-        dest = pellet.wells()[i]
-        plating(source,dest)
-        p1000.return_tip()
+    # transfert of 900ul of buffer to a new plate and put new tips box
+
+    protocol.pause('change tips box')
+    p300.reset_tipracks()
+    
+    for i in range(12):
+        p300.pick_up_tip()
+        source = pellet.columns()[i]
+        dest = supernatant.columns()[i]
+        p300.transfer(850, source.bottom(2), dest, new_tip = 'never')
+        p300.return_tip() 
+
+    # transfert of 600ul of isopropanol to precipitate
+
+    for i in range(12):
+        p300.pick_up_tip()
+        source = isopropanol.wells()[0]
+        dest = supernatant.columns()[i]
+        p300.transfer(600, source, dest, new_tip='never')
+        p300.return_tip()
+
+    # pause 
+    protocol.pause('vortex and centrifugation')
+
+    # Wash DNA pellet with 1000uL of 70% ethanol
+
+    for i in range(12):
+        p300.pick_up_tip()
+        source = ethanol.wells()[0]
+        dest = supernatant.columns()[i]
+        p300.transfer (1000, source, dest, new_tip= 'never')
+        p300.mix(5, 200, dest,rate=2.0)
+        p300.return_tip() 
+
+    # pause to centrifuge 6000g for 15min
+    
+    protocol.pause('centrifugation 6000g for 15min')
+
+    # Wash DNA pellet with 1000uL of 70% ethanol, second
+
+    for i in range(12):
+        p300.pick_up_tip()
+        source = ethanol.wells()[0]
+        dest = supernatant.columns()[i]
+        p300.transfer (1000, source, dest, new_tip= 'never')
+        p300.mix(5, 200, dest, rate =2.0)
+        p300.return_tip() 
+
+    # pause to centrifuge 6000g for 15min
+
+    protocol.pause('centrifugation 6000g for 15min')
+
+    # Redissolve the DNA in 200uL sterile water 
+
+    for i in range(12):
+        p300.pick_up_tip()
+        source = buffer_mini.wells()[9]
+        dest = supernatant.wells()[i]
+        p300.transfer (1000, source, dest, new_tip= 'never')
+        p300.mix(10, 100,dest)

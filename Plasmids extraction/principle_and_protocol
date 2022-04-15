@@ -1,0 +1,26 @@
+Manual protocol for Miniprep for plasmid extraction in 96 well plate format
+
+Reagents needed:
+-LB + Antibiotics
+-Buffer P1 (Quiagen)     50 mM Tris-HCl pH 8.0; 10 mM EDTA; 100 μg/ml RNaseA  (33.6mL for one plate)
+-Buffer P2 (Quiagen)     200 mM NaOH; 1% SDS                                  (33.6mL for one plate)
+-Buffer P3 (Quiagen)     3.0 M potassium acetate pH 5.5                       (33.6mL for one plate)
+-100% Isopropanol                                                             (57,3mL for one plate)
+-70% Ethanol                                                                  (192mL for one plate)
+(Buffer composition of Quiagen https://openwetware.org/wiki/Qiagen_Buffers)
+
+Protocol:
+1- Colonies are inoculated in 1000uL media LB + Antibiotics, incubation overnight 37°C in a sealed 96 well with shaking
+2- Harvest the bacterial cells by centrifugation at 6000g for 15min at 4°C. Supernatant is discarded by inverted the plate upside down.
+3- Resolubize the cell pellet by adding 350uL of buffer P1 and do up and down with the pipette. (If needed, vortex vigorously to help resuspend the bacteria)
+4- Transfer with 350uL of buffer P2. Mix by inverted sealed plate 4-6 times.
+5- Incubates plates at room temperature for 5min.
+6- Transfer with 350uL of buffer P3. Mix by inverted sealed plate 4-6 times.
+7- Pellet the debris by centrifuging the plate at 6000g for 45min at 4°C
+8- Transfer 900uL of supernatant into the new plate. (be careful to avoid touching the precipitate. If it is the case, repeat step 7)
+9- Precipitate DNA by adding 600uL of isopropanol in each well
+10- Mix by vortexing and centrifuge plates at 6000g for 45min at 4°C. Discard supernatant 
+11- Wash DNA pellet with 1000uL of 70% ethanol, and centrifuge at 6000g for 15min
+12- Repeat step 11
+13- Invert the plate on towel, then let the ethanol evaporate by air-drying the plate for 15-30min
+14- Redissolve the DNA in 200uL sterile water 
