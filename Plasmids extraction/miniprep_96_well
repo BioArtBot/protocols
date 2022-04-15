@@ -20,29 +20,79 @@ def run(protocol: protocol_api.ProtocolContext):
     ethanol = protocol.load_labware('brand_1_reservoir_8000ul', 8)
 
 
-    tiprack = protocol.load_labware('opentrons_96_tiprack_200ul', 2)
-    tiprack2 = protocol.load_labware('opentrons_96_tiprack_200ul', 5)
-    tiprack3 = protocol.load_labware('opentrons_96_tiprack_200ul', 3)
+    tiprack = protocol.load_labware('opentrons_96_tiprack_300ul', 6)
+    tiprack2 = protocol.load_labware('opentrons_96_tiprack_300ul', 5)
+    tiprack3 = protocol.load_labware('opentrons_96_tiprack_300ul', 3)
 
     p300 = protocol.load_instrument('p300_multi_gen2', 'right', tip_racks=[tiprack, tiprack2, tiprack3])
     
     # loop to transfert solution from buffer to pellet with mixing
-    for i in range(12):
+
+    for i in range(3):
         p300.pick_up_tip()
-        source = buffer_mini.wells()[0,1,2]
+        source = buffer_mini.wells()[0]
         dest = pellet.columns()[i]
         p300.transfer(350, source, dest, new_tip = 'never')
-        p300.mix(5, 200, dest)
+        p300.mix(5, 200, pellet.wells()[8*i].bottom(2), rate= 2.5)
         p300.return_tip()
+
+    for i in range(3,6):
+        p300.pick_up_tip()
+        source = buffer_mini.wells()[1]
+        dest = pellet.columns()[i]
+        p300.transfer(350, source, dest, new_tip = 'never')
+        p300.mix(5, 200, pellet.wells()[8*i].bottom(2), rate= 2.5)
+        p300.return_tip()   
+
+    for i in range(6,9):
+        p300.pick_up_tip()
+        source = buffer_mini.wells()[2]
+        dest = pellet.columns()[i]
+        p300.transfer(350, source, dest, new_tip = 'never')
+        p300.mix(5, 200, pellet.wells()[8*i].bottom(2), rate= 2.5)
+        p300.return_tip() 
+
+    for i in range(9,12):
+        p300.pick_up_tip()
+        source = buffer_mini.wells()[3]
+        dest = pellet.columns()[i]
+        p300.transfer(350, source, dest, new_tip = 'never')
+        p300.mix(5, 200, pellet.wells()[8*i].bottom(2), rate= 2.5)
+        p300.return_tip()   
+ 
 
     # loop for P2
 
-    for i in range(12):
+    for i in range(3):
         p300.pick_up_tip()
-        source = buffer_mini.wells()[3,4,5]
+        source = buffer_mini.wells()[4]
         dest = pellet.columns()[i]
         p300.transfer(350, source, dest, new_tip = 'never')
-        p300.mix(5, 200, dest, rate=2.5)
+        p300.mix(5, 200, pellet.wells()[8*i].bottom(2), rate= 1.5)
+        p300.return_tip()
+
+    for i in range(3,6):
+        p300.pick_up_tip()
+        source = buffer_mini.wells()[5]
+        dest = pellet.columns()[i]
+        p300.transfer(350, source, dest, new_tip = 'never')
+        p300.mix(5, 200, pellet.wells()[8*i].bottom(2), rate= 1.5)
+        p300.return_tip()   
+
+    for i in range(6,9):
+        p300.pick_up_tip()
+        source = buffer_mini.wells()[6]
+        dest = pellet.columns()[i]
+        p300.transfer(350, source, dest, new_tip = 'never')
+        p300.mix(5, 200, pellet.wells()[8*i].bottom(2), rate= 1.5)
+        p300.return_tip() 
+
+    for i in range(9,12):
+        p300.pick_up_tip()
+        source = buffer_mini.wells()[7]
+        dest = pellet.columns()[i]
+        p300.transfer(350, source, dest, new_tip = 'never')
+        p300.mix(5, 200, pellet.wells()[8*i].bottom(2), rate= 1.5)
         p300.return_tip()  
 
     # Pause for 4min
@@ -51,13 +101,37 @@ def run(protocol: protocol_api.ProtocolContext):
 
     # inactivation of the lysis by adding 350uL P3
 
-    for i in range(12):
+    for i in range(3):
         p300.pick_up_tip()
-        source = buffer_mini.wells()[6,7,8]
+        source = buffer_mini.wells()[8]
         dest = pellet.columns()[i]
         p300.transfer(350, source, dest, new_tip = 'never')
-        p300.mix(5, 200, dest)
-        p300.return_tip()     
+        p300.mix(5, 200, pellet.wells()[8*i].bottom(2))
+        p300.return_tip()
+
+    for i in range(3,6):
+        p300.pick_up_tip()
+        source = buffer_mini.wells()[9]
+        dest = pellet.columns()[i]
+        p300.transfer(350, source, dest, new_tip = 'never')
+        p300.mix(5, 200, pellet.wells()[8*i].bottom(2))
+        p300.return_tip()   
+
+    for i in range(6,9):
+        p300.pick_up_tip()
+        source = buffer_mini.wells()[10]
+        dest = pellet.columns()[i]
+        p300.transfer(350, source, dest, new_tip = 'never')
+        p300.mix(5, 200, pellet.wells()[8*i].bottom(2))
+        p300.return_tip() 
+
+    for i in range(9,12):
+        p300.pick_up_tip()
+        source = buffer_mini.wells()[11]
+        dest = pellet.columns()[i]
+        p300.transfer(350, source, dest, new_tip = 'never')
+        p300.mix(5, 200, pellet.wells()[8*i].bottom(2))
+        p300.return_tip()  
 
     # transfert of 900ul of buffer to a new plate and put new tips box
 
@@ -66,7 +140,7 @@ def run(protocol: protocol_api.ProtocolContext):
     
     for i in range(12):
         p300.pick_up_tip()
-        source = pellet.columns()[i]
+        source = pellet.wells()[8*i]
         dest = supernatant.columns()[i]
         p300.transfer(850, source.bottom(2), dest, new_tip = 'never')
         p300.return_tip() 
@@ -90,7 +164,7 @@ def run(protocol: protocol_api.ProtocolContext):
         source = ethanol.wells()[0]
         dest = supernatant.columns()[i]
         p300.transfer (1000, source, dest, new_tip= 'never')
-        p300.mix(5, 200, dest,rate=2.0)
+        p300.mix(5, 200, supernatant.wells()[8*i])
         p300.return_tip() 
 
     # pause to centrifuge 6000g for 15min
@@ -99,12 +173,15 @@ def run(protocol: protocol_api.ProtocolContext):
 
     # Wash DNA pellet with 1000uL of 70% ethanol, second
 
+    protocol.pause('change tips box')
+    p300.reset_tipracks()
+
     for i in range(12):
         p300.pick_up_tip()
         source = ethanol.wells()[0]
         dest = supernatant.columns()[i]
         p300.transfer (1000, source, dest, new_tip= 'never')
-        p300.mix(5, 200, dest, rate =2.0)
+        p300.mix(5, 200, supernatant.wells()[8*i])
         p300.return_tip() 
 
     # pause to centrifuge 6000g for 15min
@@ -116,6 +193,7 @@ def run(protocol: protocol_api.ProtocolContext):
     for i in range(12):
         p300.pick_up_tip()
         source = buffer_mini.wells()[9]
-        dest = supernatant.wells()[i]
+        dest = supernatant.wells()[8*i]
         p300.transfer (1000, source, dest, new_tip= 'never')
-        p300.mix(10, 100,dest)
+        p300.mix(10, 100, supernatant.wells()[8*i], rate =2.0)
+        p300.return_tip()
