@@ -32,7 +32,7 @@ def run(protocol: protocol_api.ProtocolContext):
         p300.pick_up_tip()
         source = buffer_mini.wells()[0]
         dest = pellet.columns()[i]
-        p300.transfer(350, source, dest, new_tip = 'never')
+        p300.transfer(350, source, dest.top(), new_tip = 'never')
         p300.mix(5, 200, pellet.wells()[8*i].bottom(2), rate= 2.5)
         p300.return_tip()
 
