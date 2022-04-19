@@ -1,4 +1,3 @@
-from ctypes import c_buffer
 import json
 import logging
 import os
@@ -99,45 +98,11 @@ protocol = create_protocol()
 
 #create the selected materias in PAML form
 
-def create_PlasmidBackbone() -> sbol3.Component:
-    plasmid_backbone = sbol3.Component('plasmid_backbone','https://github.com/BioArtBot/protocols/plasmid')
-    plasmid_backbone.name = 'BIOBRICK, plasmid backbone DNA sequence, kanamicyn resistent'   
-    return plasmid_backbone
-
-def create_promoterandrbs() -> sbol3.Component:
-    promoter_and_rbs = sbol3.Component('promorbs','https://github.com/BioArtBot/protocols/promorbs')
-    promoter_and_rbs.name = 'BIOBRICK, promoter and rbs DNA sequence, chlorophenicol resistent'   
-    return promoter_and_rbs
-
-def create_GREEN_FLOURESCENT_PROTEIN() -> sbol3.Component:
-  GFP = sbol3.Component('GFP','https://github.com/BioArtBot/protocols/GFP')
-  GFP.name = 'BIOBRICK, GFP DNA sequence, chlorophenicol resistent'   
-  return GFP
-
-def create_terminator() -> sbol3.Component:
-    terminator = sbol3.Component('terminator','https://github.com/BioArtBot/protocols/terminator')
-    terminator.name = 'BIOBRICK, sequence terminator DNA sequence, chlorophenicol resistent'   
-    return terminator
-
-def create_bsaI() -> sbol3.Component:
-    bsaI = sbol3.Component('enzyme_bsaI','https://github.com/BioArtBot/protocols/bsaI')
-    bsaI.name = 'enzyme, will cut plasmid DNA in selected parts, bsaI'   
-    return bsaI
-
-def create_bufferT4() -> sbol3.Component:
-    buffer = sbol3.Component('enzyme_buffer_T4','https://github.com/BioArtBot/protocols/buffer')
-    buffer.name = 'buffer_T4, enzyme ligase, NEB'   
-    return buffer
-
-def create_ligase() -> sbol3.Component:
-    ligase = sbol3.Component('enzyme_ligase','https://github.com/BioArtBot/protocols/ligase')
-    ligase.name = 'enzyme, bind sequences, needs buffer T4, ligase'   
-    return ligase
-
-def create_purewater() -> sbol3.Component:
-    water = sbol3.Component('uater','https://github.com/BioArtBot/protocols/water')
-    water.name = 'pure water, fills up to 10 ul'   
-    return water
+def create_material(material_name, description) -> sbol3.Component:
+    material = sbol3.Component(material_name,f'https://github.com/BioArtBot/protocols/{material_name}')
+    material.name = material_name
+    material.description = description
+    return material
 
 # settle parameters for fuction definitions
 doc = prepare_document()
@@ -164,53 +129,11 @@ PREFIX_MAP = json.dumps({"cont": CONT_NS, "om": OM_NS})
 
 # add coordinates of each component in the plate using the provision and plate coordinates primitives
 
-def provision_PlasmidBackbone(protocol: paml.Protocol, plate, plasmidbackbone):
-    c_plasmid_backbone = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='A1:B1')
-    protocol.primitive_step('Provision', resource=plasmidbackbone, destination=c_plasmid_backbone.output_pin('samples'),
-                            amount=sbol3.Measure(5, tyto.OM.microliter))
-    return c_plasmid_backbone
-
-def provision_promoterandrbs(protocol: paml.Protocol, plate, promoter_and_rbs):
-    c_promorbs = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='C1:D1')
-    protocol.primitive_step('Provision', resource=promoter_and_rbs, destination=c_promorbs.output_pin('samples'),
-                            amount=sbol3.Measure(5, tyto.OM.microliter))
-    return c_promorbs 
-
-def provision_GREEN_FLOURESCENT_PROTEIN(protocol: paml.Protocol, plate, GFP):
-    c_GFP = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='E1:F1')
-    protocol.primitive_step('Provision', resource=GFP, destination=c_GFP.output_pin('samples'),
-                            amount=sbol3.Measure(5, tyto.OM.microliter))
-    return c_GFP
-
-def provision_terminator(protocol: paml.Protocol, plate, terminator):
-    c_terminator = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='G1:H1')
-    protocol.primitive_step('Provision', resource=terminator, destination=c_terminator.output_pin('samples'),
-                            amount=sbol3.Measure(5, tyto.OM.microliter))
-    return c_terminator
-
-def provision_bsaI(protocol: paml.Protocol, plate, bsaI):
-    c_bsaI = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='A2:B2')
-    protocol.primitive_step('Provision', resource=bsaI, destination=c_bsaI.output_pin('samples'),
-                            amount=sbol3.Measure(5, tyto.OM.microliter))
-    return c_bsaI
-
-def provision_bufferT4(protocol: paml.Protocol, plate, buffer):
-    c_buffer = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='C2:D2')
-    protocol.primitive_step('Provision', resource=buffer, destination=c_buffer.output_pin('samples'),
-                            amount=sbol3.Measure(5, tyto.OM.microliter))
-    return c_buffer
-
-def provision_ligase(protocol: paml.Protocol, plate, ligase):
-    c_ligase = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='E2:F2')
-    protocol.primitive_step('Provision', resource=ligase, destination=c_ligase.output_pin('samples'),
-                            amount=sbol3.Measure(5, tyto.OM.microliter))
-    return c_ligase
-
-def provision_water(protocol: paml.Protocol, plate, water):
-    c_water = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='G2:H2')
-    protocol.primitive_step('Provision', resource=water, destination=c_water.output_pin('samples'),
-                            amount=sbol3.Measure(10, tyto.OM.microliter))
-    return c_water
+def provision_component(protocol: paml.Protocol, plate, component, coordinates, volume):
+    c_component = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates=coordinates)
+    protocol.primitive_step('Provision', resource=component, destination=c_component.output_pin('samples'),
+                            amount=sbol3.Measure(volume, tyto.OM.microliter))
+    return c_component
 
 # define the functions for assemblying the materials from the soource wells to the build wells
 
@@ -234,97 +157,95 @@ def golden_gate_protocol() -> Tuple[paml.Protocol, Document]:
     
     doc: Document = prepare_document()
 
-#############################################
-# Import the primitive libraries
+    #############################################
+    # Import the primitive libraries
     import_paml_libraries()
 
     
-#############################################
-# Create the protocol
+    #############################################
+    # Create the protocol
     protocol: paml.Protocol = create_protocol()
     doc.add(protocol)
 
-# create the materials to be provisione
-    plasmid_backbone = create_PlasmidBackbone()
-    doc.add(plasmid_backbone)
+    wavelength_param = protocol.input_value(
+    'wavelength', sbol3.OM_MEASURE, optional=True,
+    default_value=sbol3.Measure(600, tyto.OM.nanometer))
 
-    promoter_and_rbs = create_promoterandrbs()
-    doc.add(promoter_and_rbs)
+    # create the materials to be provisioned
+    # include all of their info here so we can reference it later
+    component_info = {
+                'plasmid_backbone':{
+                    'description': 'BIOBRICK, plasmid backbone DNA sequence, kanamicyn resistent',
+                    'coordinates':'A1:B1',
+                    'volume': 5},
+                'promoter_and_rbs':{
+                    'description': 'BIOBRICK, promoter and rbs DNA sequence, chlorophenicol resistent',
+                    'coordinates': 'C1:D1',
+                    'volume': 5},
+                'GFP':{
+                    'description': 'BIOBRICK, GFP DNA sequence, chlorophenicol resistent',
+                    'coordinates': 'E1:F1',
+                    'volume': 5},
+                'terminator':{
+                    'description': 'BIOBRICK, sequence terminator DNA sequence, chlorophenicol resistent',
+                    'coordinates': 'G1:H1',
+                    'volume': 5},
+                'bsaI':{
+                    'description': 'enzyme, will cut plasmid DNA in selected parts, bsaI',
+                    'coordinates': 'A2:B2',
+                    'volume': 5},
+                'buffer':{
+                    'description': 'buffer_T4, enzyme ligase, NEB',
+                    'coordinates': 'C2:D2',
+                    'volume': 5},
+                'ligase':{
+                    'description':'enzyme, bind sequences, needs buffer T4, ligase',
+                    'coordinates': 'E2:F2',
+                    'volume': 5},
+                'water':{
+                    'description': 'pure water, fills up to 10 ul',
+                    'coordinates':'G2:H2',
+                    'volume': 10}
+    }
 
-    GFP = create_GREEN_FLOURESCENT_PROTEIN()
-    doc.add(GFP)
+    materials = {}
+    for component in component_info:
+        materials[component] = create_material(component, component_info[component]['description'])
+        doc.add(materials[component])
 
-    terminator = create_terminator()
-    doc.add(terminator)
+    # actual steps of the protocol (liquid handling part)
 
-    bsaI = create_bsaI()
-    doc.add(bsaI)
-
-    buffer = create_bufferT4()
-    doc.add(buffer)
-
-    ligase = create_ligase()
-    doc.add(ligase)
-
-    water = create_purewater()
-    doc.add(water)
-
-# actual steps of the protocol (liquid handling part)
-#get a plate
-
+    #get a plate
     plate = create_plate(protocol)
 
-# put DNA into the selected wells following the build plan
-
-    provision_PlasmidBackbone(protocol, plate, plasmid_backbone)
-
-    provision_promoterandrbs(protocol, plate, promoter_and_rbs)
-
-    provision_GREEN_FLOURESCENT_PROTEIN(protocol, plate, GFP)
-
-    provision_terminator(protocol, plate, terminator)
-
-    provision_bsaI(protocol, plate, bsaI)
-
-    provision_bufferT4(protocol, plate, buffer)
-
-    provision_ligase(protocol, plate, ligase)
-
-    provision_water(protocol, plate, water)
-
-
-     # list the materials for transfer function
-
-    c_plasmid_backbone = provision_PlasmidBackbone(protocol, plate, plasmid_backbone) 
-    c_promorbs = provision_promoterandrbs(protocol, plate, promoter_and_rbs)
-    c_GFP = provision_GREEN_FLOURESCENT_PROTEIN(protocol, plate, GFP)
-    c_terminator = provision_terminator(protocol, plate, terminator)
-    c_bsaI = provision_bsaI(protocol, plate, bsaI)
-    c_buffer = provision_bufferT4(protocol, plate, buffer)
-    c_ligase = provision_ligase(protocol, plate, ligase)
-    c_water = provision_water(protocol, plate, water)
+    # provision components to the plate
+    components = {}
+    for component in component_info:
+        components[component] = provision_component(protocol,
+                                                    plate,
+                                                    materials[component],
+                                                    component_info[component]['coordinates'],
+                                                    component_info[component]['volume']
+                                                    )
     
    
-# define the wells where you will be doing the GG assembly  
+    # define the wells where you will be doing the GG assembly  
     goldengate_build_wells = protocol.primitive_step('PlateCoordinates', source=plate.output_pin('samples'), coordinates='A3:B3')
 
-
-# assemble DNA in build wells
-    components: list = [c_plasmid_backbone,c_promorbs, c_GFP,c_terminator,c_bsaI,c_buffer, c_ligase, c_water]
-    for component in components:
+    # assemble DNA in build wells
+    for component in components.values():
         assemble_components(protocol, component, goldengate_build_wells)
 
-    assemble_buffer_and_water(protocol,c_buffer,c_water,goldengate_build_wells)
+    assemble_buffer_and_water(protocol,components['buffer'],components['water'],goldengate_build_wells) 
 
-# 
 
-# Finish liquid handling protocol
-
+    # Finish liquid handling protocol
     output = protocol.designate_output('constructs', 'http://bioprotocols.org/paml#SampleCollection',
     goldengate_build_wells.output_pin('samples'))
     protocol.order(protocol.get_last_step(), output)
     
     return protocol, doc  # don't return until all else is complete
+
 
 # the protocol needs to be updated with the 'temperature change' primitive for it to be possible to include the thermocycling steps
 
