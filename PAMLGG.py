@@ -167,10 +167,6 @@ def golden_gate_protocol() -> Tuple[paml.Protocol, Document]:
     protocol: paml.Protocol = create_protocol()
     doc.add(protocol)
 
-    wavelength_param = protocol.input_value(
-    'wavelength', sbol3.OM_MEASURE, optional=True,
-    default_value=sbol3.Measure(600, tyto.OM.nanometer))
-
     # create the materials to be provisioned
     # include all of their info here so we can reference it later
     component_info = {
