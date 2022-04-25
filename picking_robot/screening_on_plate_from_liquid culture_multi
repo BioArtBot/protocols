@@ -17,13 +17,13 @@ def run(protocol: protocol_api.ProtocolContext):
     yeast_sample_well_3 = protocol.load_labware('nest_96_wellplate_2ml_deep', 7)
     yeast_sample_well_4 = protocol.load_labware('nest_96_wellplate_2ml_deep', 10)
 
-    ##plate_384 = protocol.load_labware('grid_384well_epp', 3)
-    ##plate_384_1mg = protocol.load_labware('grid_384well_epp', 6)
-    ##plate_384_4mg = protocol.load_labware('grid_384well_epp', 9)
+    plate_384 = protocol.load_labware('grid_384well_epp', 3)
+    plate_384_1mg = protocol.load_labware('grid_384well_epp', 6)
+    plate_384_4mg = protocol.load_labware('grid_384well_epp', 9)
 
-    plate_384 = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 3)
-    plate_384_1mg = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 6)
-    plate_384_4mg = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 9)
+    # plate_384 = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 3)
+    # plate_384_1mg = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 6)
+    # plate_384_4mg = protocol.load_labware('appliedbiosystemsmicroamp_384_wellplate_40ul', 9)
 
     tiprack = protocol.load_labware('opentrons_96_tiprack_20ul', 2)
     tiprack2 = protocol.load_labware('opentrons_96_tiprack_20ul', 5)
@@ -38,10 +38,6 @@ def run(protocol: protocol_api.ProtocolContext):
         p20.move_to(d.bottom())
         p20.dispense(2,d)
 
-    def plating_cartesian(s,d):
-        p20.aspirate(2, s)
-        p20.move_to(d)
-        p20.dispense(2,d)
 
     plates = [plate_384.wells(), plate_384_1mg.wells(), plate_384_4mg.wells()]
 
@@ -64,15 +60,15 @@ def run(protocol: protocol_api.ProtocolContext):
     for i in range(12):  
         p20.pick_up_tip()
         for i in range(12):    
-            source = yeast_sample_well_3.wells [8*i]
-            dest = y[16*i].from_center_cartesian(0,-1.25,-1)
+            source = yeast_sample_well_3.wells()[8*i]
+            dest = y[16*i+1]
             plating(source,dest)
         p20.return_tip()
 
-     for y in plates:
+    for i in range(12):  
         p20.pick_up_tip()
         for i in range(12):    
-            source = yeast_sample_well_4.wells [8*i]
-            dest = y[16*i+192].from_center_cartesian(0,-1.25,-1)
+            source = yeast_sample_well_4.wells()[8*i]
+            dest = y[16*i+193]
             plating(source,dest)
         p20.return_tip()

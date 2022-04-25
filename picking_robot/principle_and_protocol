@@ -1,0 +1,9 @@
+Screening on plate from liquid culture
+
+The principle of this protocol is to transfer liquid culture of transformants
+on agar plate to screen different condition. In that protocol, 4 96_well plate
+culture of unique transformant are transfer on 3 square agar plate.
+
+Important: the custom plate definition must be on '384Standard' format and
+not on 'irregular' format. Otherwise, there would be error with accessing 
+the B row with a 8 channel pipette 
